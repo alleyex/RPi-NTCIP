@@ -145,9 +145,15 @@
 
 本協定之傳輸介面採非同步傳輸方式，以字元為資料識別單元，並配合起始位元和終止位元以作為傳送、接收兩端傳輸資料位元流之準則，資料之基本格式如下所示：
 
-```
-| 起始位元 | 資料位元 | 同位位元 | 終止位元 |
-|    0     | 8 bits   |  NONE   |    1     |
+```mermaid
+sequenceDiagram
+    participant 傳送端
+    participant 接收端
+
+    傳送端->>接收端: Data-request
+    接收端-->>傳送端: ACK
+    接收端->>傳送端: Data_response
+    傳送端-->>接收端: ACK
 ```
 
 - 起始位元：1 位元（訊號值為 0）。
@@ -189,6 +195,11 @@
 
 #### 1. 通訊正常
 
+傳輸採用 Stop and Wait 通訊方式，傳輸時分成傳送端與接收端，
+傳輸正常程序如下圖(a)所示，傳送端發出 Data_request 訊息，要求接收端回傳資訊，
+接收端於正確收到資料後（CRC 正確）回覆 ACK 與傳送端，如有資訊回傳則接收端傳送 Data_response 訊息給傳送端，
+如傳送端正確收到資料後（CRC 正確）回覆 ACK 與傳送端，則完成資料傳送過程。
+
 ```mermaid
 sequenceDiagram
     participant 傳送端
@@ -202,6 +213,10 @@ sequenceDiagram
 
 #### 2. 通訊異常
 
+如資料發生傳輸錯誤（CRC 錯誤），如下圖(b)，接收端發出 NACK 訊號，
+傳輸端接收此訊號後，重新傳輸訊息封包，如傳送端連續 5 次接收到 NACK 訊號或接收端連續 5 次發送 NACK 訊號，
+則判斷為通訊異常，中心端之通訊伺服器應提出通訊異常訊息給控制中心，現場端設備則以通訊斷線方式處理。
+
 ```mermaid
 sequenceDiagram
     participant 傳送端
@@ -214,7 +229,21 @@ sequenceDiagram
 
 #### 3. 通訊故障（系統異常）
 
-如傳送端於資料傳送後無法收到任何訊息，則於 timeout 時間後再重送資料，如連續五次無法成功，則判定系統異常或通訊故障。
+如傳送端於資料傳送後無法收到任何訊息（如圖(c)），則於 timeout 時間後再重送資料，
+如連續五次無法成功，則判定系統異常或通訊故障。
+
+```mermaid
+sequenceDiagram
+    participant 傳送端
+    participant 接收端
+    傳送端->>接收端: Data-request
+    Note right of 接收端: T1
+    Note right of 接收端: T2
+    Note right of 接收端: T3
+    Note right of 接收端: T4
+    Note over 傳送端,接收端: 未回送，timeout
+    傳送端->>接收端: Data-request (重送)
+```
 
 - timeout 時間 (T) = 傳送資料封包時間(T1) + 接收端處理時間(T2) + 接收端回應時間(T3) + 傳送端處理時間(T4)
 - timeout 時間(T) 須根據載硬體處理速度與通訊速度而定。
