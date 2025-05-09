@@ -265,4 +265,53 @@ sequenceDiagram
 
 4. 承上所述，無論何種訊息（除ACK、NAK本身之外），無論上傳/下載，無論控制中心或現場設備，均需先回報ACK或NAK，以作通訊層之回應溝通。而應用層之訊息正確/有效/成功與否溝通，則以通訊協定0F H+80 H 或 0F H+81 H 為之。
 
+## 四、碼框格式
+
+### 1. 訊息碼框
+
+| DLE | STX | SEQ | ADDR | LEN | INFO | DLE | ETX | CKS |
+|-----|-----|-----|------|-----|------|-----|-----|-----|
+|1B  |1B   |1B   |2B    |2B   |N Bytes|1B  |1B   |1B   |
+
+欄位長（LEN）：10 Bytes + N Bytes  
+CKS = XOR(DLE, STX, SEQ, ADD, LEN, INFO, DLE, ETX)
+
+---
+
+### 2. 正認知碼框
+
+| DLE | ACK | SEQ | ADDR | LEN | CKS |
+|-----|-----|-----|------|-----|-----|
+|1B   |1B   |1B   |2B    |2B   |1B   |
+
+欄位長（LEN）：8 Bytes  
+CKS = XOR(DLE, ACK, SEQ, ADD, LEN, ETX)
+
+---
+
+### 3. 負認知碼框
+
+| DLE | NAK | SEQ | ADDR | LEN | ERR | CKS |
+|-----|-----|-----|------|-----|-----|-----|
+|1B   |1B   |1B   |2B    |2B   |1B   |1B   |
+
+欄位長（LEN）：9 Bytes  
+CKS = XOR(DLE, NAK, SEQ, ADD, LEN, ERR, ETX)
+
+## 五、碼框控制碼用途及定義
+
+| 控制碼 | 長度   | 值      | 定義及用途 |
+|--------|--------|---------|------------|
+| DLE    | 1 Byte | AA H    | Data Link Escape 用以控制資料傳輸。 |
+| STX    | 1 Byte | BB H    | Start of Text 訊息碼框之開始。 |
+| ETX    | 1 Byte | CC H    | End of Text 訊息碼框之結束。 |
+| ACK    | 1 Byte | DD H    | Positive Acknowledge 正認知碼框，表示碼框及 CKS 正確。 |
+| NAK    | 1 Byte | EE H    | Negative Acknowledge 負認知碼框，表示碼框及 CKS 錯誤。 |
+| SEQ    | 1 Byte |         | SEQUENCE，辨識 ACK 或 NAK 回應歸屬。 |
+| ADDR   | 2 Bytes|         | ADDRESS，其中 FFFF(H) 為廣播編號。低位元組(byte)前三位元(bit)預留為子路設備使用，高位元組與低位元後五位元為設備編號。例：設備編號為 4656 (0x1230)，則 4657 (0x1231) ~ 4563 (0x1237) 為其子路設備編號。 |
+| LEN    | 2 Bytes|         | LENGTH，表訊息碼框之長度，其中正認知碼框時 LEN=08H，負認知碼框時 LEN=09H。 |
+| INFO   | N Bytes|         | 訊息欄位。 |
+| ERR    | 1 Byte |         | 傳輸錯誤檢知。1H:校對位元錯誤。2H:碼框錯誤。4H:位址錯誤。8H:長度錯誤。 |
+| CKS    | 1 Byte |         | 校對位元組。 |
+
 
