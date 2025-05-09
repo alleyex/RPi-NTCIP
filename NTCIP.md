@@ -189,17 +189,28 @@
 
 #### 1. 通訊正常
 
-傳輸採用 Stop and Wait 通訊方式，傳輸時分成傳送端與接收端，傳輸正常程序如下：
-- 傳送端發出 Data_request 訊息，要求接收端傳資料。
-- 接收端於正確收到資料後（CRC 正確）回覆 ACK 與傳送端。
-- 如有資訊回傳則接收端傳送 Data_response 訊息給傳送端。
-- 如傳送端收到資料後（CRC 正確）回覆 ACK 與傳送端，則完成資料傳送過程。
+```mermaid
+sequenceDiagram
+    participant 傳送端
+    participant 接收端
+
+    傳送端->>接收端: Data-request
+    接收端-->>傳送端: ACK
+    接收端->>傳送端: Data_response
+    傳送端-->>接收端: ACK
+```
 
 #### 2. 通訊異常
 
-如資料發生傳輸錯誤（CRC 錯誤），接收端發出 NACK 訊息，傳送端接收到此訊號後，重新傳輸訊息封包。如傳送端連續 5 次接收到 NACK 訊號或接收端連續 5 次發送 NACK 訊號，則判斷為通訊異常。
+```mermaid
+sequenceDiagram
+    participant 傳送端
+    participant 接收端
 
-中心端之通訊伺服器應提出通訊異常訊息給控制中心，現場端設備則以通訊斷線方式處理。
+    傳送端->>接收端: Data-request
+    接收端-->>傳送端: NACK
+    傳送端->>接收端: Data-request (重送)
+```
 
 #### 3. 通訊故障（系統異常）
 
