@@ -1,4 +1,3 @@
-
 # 都市交通控制通訊協定 3.0 版
 交通部  
 中華民國九十三年十一月
@@ -436,115 +435,80 @@ C. 排序建議
 
 1. 交控中心及終端設備，於接獲對方完整碼框訊息後，應進行通訊訊息及參數檢核。
 
-2. 檢核原則
-(1) 當參數為整數值時必須檢核值域 (Value Range)。
-(2) 當參數為 Bit Map 時，必須檢核位元設定之衝突。
+2. 檢核原則：
+   1. 當參數為整數值時必須檢核值域（Value Range）。
+   2. 當參數為 Bit Map 時，必須檢核位元設定之衝突。
 
-3. 現場終端設備接收到通訊訊息後，應先檢核位址欄、設備碼、訊息碼及訊息參數範圍，如無誤，應立即自動以 0F H+80 H 訊息(設定訊息)或查詢結果(查詢訊息)回報中心；但若有其相對應之設定回報型態訊息回應者(如對時訊息)，則不需再以 0F H+80 H 訊息回報中心，若其相對應之設定回報型態訊息不須回應時(如對時訊息)，則仍須以 0F H+80 H 訊息回報中心；如有誤 (設定及查詢訊息)，則應立即自動以 0F H+81 H 訊息回報中心。
+3. 現場終端設備接收到通訊訊息後，應先檢核位址欄、設備碼、訊息碼及訊息參數範圍，如無誤，應立即自動以 0F H+80 H 訊息（設定訊息）或查詢結果（查詢訊息）回報中心；但若有其相對應之設定回報型態訊息回應者（如對時訊息），則不需再以 0F H+80 H 訊息回報中心，若其相對應之設定回報型態訊息不須回應時（如對時訊息），則仍須以 0F H+80 H 訊息回報中心；如有誤（設定及查詢訊息），則應立即自動以 0F H+81 H 訊息回報中心。
 
 4. 交控中心接收到通訊訊息亦應先檢核位址欄，如有誤，則應紀錄並告警顯示設備位址比對不符，但不影響該筆通訊訊息之後續功能處理。
 
 5. 通道之通訊斷線回復時，中心端應對相關終端設備執行對時功能。
 
-6. 終端設備控制器均固定以 0F H+04 H 作週期 (Hardware Cycle) 回報硬體狀態 (Hardware Status) 至交控中心，號誌控制器則以週期性 (TransmitCycle)傳輸 5F H+0F H 傳回號誌運作狀態，偵測器則週期性 (TransmitCycle)重複傳輸 6F H+0F H 傳回交通資料。
+6. 終端設備控制器均固定以 0F H+04 H 作週期（Hardware Cycle）回報硬體狀態（Hardware Status）至交控中心，號誌控制器則以週期性（TransmitCycle）傳輸 5F H+0F H 傳回號誌運作狀態，偵測器則週期性（TransmitCycle）重複傳輸 6F H+0F H 傳回交通資料。
 
 7. 交談式的通訊傳輸，詢問端發出要求，接收端回正認知碼框後，應立即回報結果，收到正認知碼框，即結束交談式通訊。
 
-8. 車輛偵測器重複傳輸 (Cyclic Transmission) 以 6F H + 0F H 傳送，其週期以 6F H+3F H 傳輸週期設定之，重複傳輸啟動時，即開始傳送偵測器收集之資料，硬體狀態 (Hardware Status) 另以 0F H+14 H 設定 0F H+04 H 之傳送週期。車輛偵測器所記存之交通資料，中心依該通道之通訊系統狀況良好時，自動要求回報。
+8. 車輛偵測器重複傳輸（Cyclic Transmission）以 6F H + 0F H 傳送，其週期以 6F H+3F H 傳輸週期設定之，重複傳輸啟動時，即開始傳送偵測器收集之資料，硬體狀態（Hardware Status）另以 0F H+14 H 設定 0F H+04 H 之傳送週期。車輛偵測器所記存之交通資料，中心依該通道之通訊系統狀況良好時，自動要求回報。
 
-
+---
 
 ### 四、一般性訂定原則
 
-1. 訊息說明方式
+#### 1. 訊息說明方式
 
-(1) 將訊息說明表分成訊息編號、訊息型態、訊息等級、訊息類別、目的、用途、訊息格式、訊息參數定義、訊息處理步驟、參考訊息令等十個部份：
+1. 將訊息說明表分成下列十個部份：
+   - **訊息編號**：訊息起始之複合碼編號。
+   - **訊息型態**：訊息上下傳輸型態分設定、設定回報、查詢、查詢回報、主動回報。
+   - **訊息等級**：訊息之重要性等級，「A」表進階訊息（Advance）、「B」表基本訊息（Basic）、「O」表選擇性訊息（Option）。
+   - **訊息類別**：說明此訊息是屬於何種功能類別。
+   - **目的**：說明訊息所執行之功能。
+   - **用途**：說明訊息之使用時機。
+   - **訊息格式**：說明訊息所代表之訊息編號與其參數格式。
+   - **訊息參數定義**：說明訊息格式內之各參數定義及其值域。有關參數值域之定義，除特別說明外均為 unsigned 無號數。
+   - **訊息處理步驟**：說明協定所適用之兩端，傳輸方向及收發訊息間之必要相關應答處理程序，以確認兩端之傳輸為合理。說明兩端位置之欄位，靠左邊主要為中心端，靠右邊主要為現場設備。另外本欄僅定義使用該訊息協定之兩端，其中介設備（如轉傳或代傳）則不列出。
 
-• 訊息編號：訊息起始之複合碼編號。
-• 訊息型態：訊息上下傳輸型態分設定、設定回報、查詢、查詢回報、主動回報。
-• 訊息等級：訊息之重要性等級，「A」表進階訊息(Advance)、「B」表基本訊息(Basic)、「O」表選擇性訊息(Option)。
-• 訊息類別：說明此訊息是屬於何種功能類別。
-• 目的：說明訊息所執行之功能。
-• 用途：說明訊息之使用時機。
-• 訊息格式：說明訊息所代表之訊息編號與其參數格式。
-• 訊息參數定義：說明訊息格式內之各參數定義及其值域。有關參數值域之定義，除特別說明外均為 unsigned 無號數。
-• 訊息處理步驟：說明協定所適用之兩端，傳輸方向及收發訊息間之必要相關應答處理程序，以確認兩端之傳輸為合理。說明兩端位置之欄位，靠左邊主要為中心端，靠右邊主要為現場設備。另外本欄僅定義使用該訊息協定之兩端，其中介設備（如轉傳或代傳）則不列出。
+2. 由於本協定並不包含交通號誌控制中心狀態或現場設備規範部份，故本協定並未定義訊息收到後設備之內部機制反應，僅定義其必要之應答處理程序。
 
-(2) 由於本協定並不包含交通號誌控制中心狀態或現場設備規範部份，故本協定並未定義訊息收到後設備之內部機制反應，僅定義其必要之應答處理程序。
+3. 訊息格式說明：
+   - 參數之間以 `+` 作分隔，若參數（參數群）中含有兩個以上連在一起以括號分開者如 `x_par(N_num)`，前一參數（或參數群）表示需要填之參數，後一參數則表示個數，即表示有 N_num 個 x_par 要填。
 
-(3) 訊息格式說明：
+   **範例：**
+   - **A.** `0F H+CO H+EquipmentNo+SubCount+EquipmentID(SubCount)`
+     - 第五個位置表示有 SubCount 個 EquipmentID，如 SubCount 為 3，則 EquipmentID 有三個。
+     - 上列等同下列：
+       `0FH+COH+EquipmentNo+SubCount+EquipmentID+...+EquipmentID`（有 SubCount 指定之個數）
 
-參數之間以 + 作分隔，若參數(參數群)中含有兩個以上連在一起以括號分開者如 x_par(N_num)，前一參數(或參數群)表示需要填之參數，後一參數則表示個數，即表示有 N_num 個 x_par 要填，請參考下述舉例：
+   - **B.** `5F H+1E H+Direct(2)+(Hour+Min)(2)`
+     - 如同：
+       `5F H+1E H+Direct+Direct+Hour+Min+Hour+Min`（有兩個 Direct，有兩個 Hour+Min）
 
-A. 0F H+CO H+EquipmentNo+SubCount+EquipmentID(SubCount)
+   - **C.** `5F H+2F H+PhaseOrder+SignalMap+SignalCount+SubPhaseCount+{StepCount+[SignalStatus(SignalCount)](StepCount)}(SubPhaseCount)`
+     - 如同下列：
+       `5FH+2FH+PhaseOrder+SignalMap+SignalCount+SubPhaseCount+`
+       `{StepCount+SignalStatus+...+SignalStatus}`（有 SignalCount 所指之個數）
+       `+SignalStatus+...+SignalStatus`（有 SignalCount 所指之個數）
+       `+...`
+       `StepCount+SignalStatus+...+SignalStatus`（有 SignalCount 所指之個數）
+       `+SignalStatus+...+SignalStatus`（有 SignalCount 所指之個數）
+       `+...`
+       `+SignalStatus+...+SignalStatus`（有 SignalCount 所指之個數）
+     - 此例可詳見 5F H+2F H 內之實例。
 
-第五個位置表示有 SubCount 個 EquipmentID，如 SubCount 為 3，則 EquipmentID 有三個
+4. 位元對應：
+   - 訊息內之參數定義中有使用位元對應（BitMap）方式時，bit on 表示 bit 設為 1；bit off 表示 bit 設為 0。
 
-上列等同下列
+#### 2. 訊息之使用等級原則
 
-0FH+COH+EquipmentNo+SubCount+EquipmentID+．．．+EquipmentID
+通訊協定依重要性將訊息分成 A、B、O 三級，以供不同都市的運用，也以因應各縣市交控設備之不同預算規模。
 
-有 SubCount 指定之個數
+- 「A」表進階訊息（Advance）
+- 「B」表基本訊息（Basic）
+- 「O」表選擇訊息（Option）
 
-B. 5F H+1E H+Direct(2)+(Hour+Min)(2)
+其中：
+- 「B」表基本訊息為基本（必要）功能也可適於無線設備使用。
+- 「A」表進階訊息為進階（暫時不用）功能且不適於無線設備使用。
+- 「O」表選擇訊息為特殊（依需求使用）可考慮功能（不適於無線設備使用）。由使用單位來決定哪些訊息或功能是需要的。
 
-如同
-
-5F H+1E H+Direct+Direct+Hour+Min+Hour+Min
-
-有兩個 Direct，有兩個 Hour+Min
-
-C. 5F H+2F H+PhaseOrder+SignalMap+SignalCount+SubPhaseCount+{StepCount+[SignalStatus(SignalCount)](StepCount)}(SubPhaseCount)
-
-如同下列
-
-5FH+2FH+PhaseOrder+SignalMap+SignalCount+SubPhaseCount+
-
-{StepCount+SignalStatus+．．．+SignalStatus}
-
-有 SignalCount 所指之個數
-
-+SignalStatus+．．．+SignalStatus
-
-有 SignalCount 所指之個數
-
-+．．．
-
-+SignalStatus+．．．+SignalStatus
-
-有 SignalCount 所指之個數
-
-+．．．
-
-StepCount+SignalStatus+．．．+SignalStatus
-
-有 SignalCount 所指之個數
-
-+SignalStatus+．．．+SignalStatus
-
-有 SignalCount 所指之個數
-
-+．．．
-
-+SignalStatus+．．．+SignalStatus
-
-有 SignalCount 所指之個數
-
-此例可詳見 5F H+2F H 內之實例。
-
-(4) 位元對應
-
-訊息內之參數定義中有使用位元對應(BitMap)方式時，bit on 表示 bit 設為 1；bit off 表示 bit 設為 0。
-
-2. 訊息之使用等級原則
-
-通訊協定依重要性將訊息分成 A、B、O 三級，以供不同都市的運用，也以因應各縣市交控設備之不同預算規模。"A"表進階訊息(Advance)，"B"表基本訊息 (Basic)、"O"表選擇訊息 (Option)
-
-其中
-
-'B'表基本訊息為基本(必要)功能也可適於無線設備使用。
-
-'A'表進階訊息為進階(暫時不用)功能且不適於無線設備使用。
-
-'O'表選擇訊息為特殊(依需求使用)可考慮功能(不適於無線設備使用)。由使用單位來決定哪些訊息或功能是需要的。
 
