@@ -1,0 +1,7 @@
+# 基本依賴
+typing-extensions>=4.0.0
+python-dateutil>=2.8.2
+
+# 測試依賴
+pytest>=7.0.0
+pytest-cov>=4.0.0 
