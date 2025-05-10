@@ -285,7 +285,7 @@ CKS = XOR(DLE, STX, SEQ, ADD, LEN, INFO, DLE, ETX)
 |1B   |1B   |1B   |2B    |2B   |1B   |
 
 欄位長（LEN）：8 Bytes  
-CKS = XOR(DLE, ACK, SEQ, ADD, LEN, ETX)
+CKS = XOR(DLE, ACK, SEQ, ADDR, LEN)
 
 ---
 
@@ -296,7 +296,7 @@ CKS = XOR(DLE, ACK, SEQ, ADD, LEN, ETX)
 |1B   |1B   |1B   |2B    |2B   |1B   |1B   |
 
 欄位長（LEN）：9 Bytes  
-CKS = XOR(DLE, NAK, SEQ, ADD, LEN, ERR, ETX)
+CKS = XOR(DLE, NAK, SEQ, ADDR, LEN, ERR)
 
 ## 五、碼框控制碼用途及定義
 
