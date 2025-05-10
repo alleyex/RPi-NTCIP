@@ -1,4 +1,4 @@
-# 伺服器設定
+# 伺服器基本設定
 server:
   host: '0.0.0.0'
   port: 5000
@@ -12,8 +12,19 @@ logging:
   max_size: 10485760  # 10MB
   backup_count: 5
 
-# NTCIP設定
+# NTCIP 通訊設定
 ntcip:
+  # 基本通訊參數
   retry_count: 5
   retry_delay: 1  # 秒
   max_frame_size: 1024  # bytes 
+
+  # 裝置設定
+  device:
+    address: 0x0001  # 裝置位址（16 位元）
+    
+    # 通訊參數
+    communication:
+      retry_count: 3      # 重試次數
+      retry_interval: 1.0  # 重試間隔（秒）
+      response_timeout: 5.0  # 回應超時時間（秒） 
