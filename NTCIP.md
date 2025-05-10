@@ -522,7 +522,7 @@ C. 排序建議
 | 目的         | 回報設定訊息有效。                                                                       |
 | 用途         | 確定設定訊息已被現場設備接受。<br>針對所有訊息型態為設定之訊息，如設定正確後即以此訊息回應。 |
 | 訊息格式     | 0F H+80 H+CommandID                                                                      |
-| 訊息參數定義 | CommandID：2 Byte<br>第一個 byte 為設備碼（00 H~FF H）<br>第二個 byte 為指令碼（00 H~FF H） |
+| 訊息參數定義 | CommandID：2 Byte<br>第一個 byte 為設備碼（00 H &#126; FF H）<br>第二個 byte 為指令碼（00 H&#126;FF H） |
 | 訊息處理步驟 | <table><tr><td>控制中心</td><td>←</td><td>號誌控制器、車輛偵測器、資訊可變標誌</td></tr><tr><td></td><td colspan="2">1. 接收設定型態之訊息。<br>2. 檢核訊息無誤，以 0F H+80 H 回報完成設定訊息。</td></tr><tr><td>3. 接收 0F H+80 H 與參數。</td><td></td><td></td></tr></table> |
 | 參考訊息     | 0F H+81 H。                                                                              |
 
