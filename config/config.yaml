@@ -1,0 +1,5 @@
+ntcip:
+  device:
+    address: 0x0001
+  control_center:
+    ip: "192.168.0.20"  # 請替換為實際的控制中心 IP 位址 
