@@ -644,6 +644,10 @@ C. 排序建議
 | 目的         | 設定現場設備之日期、時間。                                                               |
 | 用途         | 現場設備系統時間管理，定時對時、即時對時。                                               |
 | 訊息格式     | 0F H+12 H+Year+Month+Day+Week+Hour+Min+Sec                                               |
-| 訊息參數定義 | Year：1 Byte，年，整數(00 &#126;255)。（國曆）<br>Month：1 Byte，月，整數(01 &#126;12)。<br>Day：1 Byte，日，整數(01 &#126;31)。<br>Week：1 Byte，星期，整數(01 &#126;07)。<br>&nbsp;&nbsp;1：星期一<br>&nbsp;&nbsp;2：星期二<br>&nbsp;&nbsp;3：星期三<br>&nbsp;&nbsp;4：星期四<br>&nbsp;&nbsp;5：星期五<br>&nbsp;&nbsp;6：星期六<br>&nbsp;&nbsp;7：星期日<br>Hour：1 Byte，時，整數(00 &#126;23)。<br>Min：1 Byte，分，整數(00 &#126;59)。<br>Sec：1 Byte，秒，整數(00 &#126;59)。 |
+| 訊息參數定義 | Year：1 Byte，年，整數(00~255)。（國曆）<br>Month：1 Byte，月，整數(01~12)。<br>Day：1 Byte，日，整數(01~31)。<br>Week：1 Byte，星期，整數(01~07)。<br>　1：星期一<br>　2：星期二<br>　3：星期三<br>　4：星期四<br>　5：星期五<br>　6：星期六<br>　7：星期日<br>Hour：1 Byte，時，整數(00~23)。<br>Min：1 Byte，分，整數(00~59)。<br>Sec：1 Byte，秒，整數(00~59)。 |
+| 訊息處理步驟 | <table><tr><td>控制中心</td><td>→</td><td>號誌控制器、車輛偵測器、資訊可變標誌</td></tr><tr><td>1. 下傳訊息 0F H+12 H 及時間參數。</td><td></td><td>2. 接收 0F H+12 H。<br>3. 檢核時間參數與設定時間之誤差。<br>4. 將時間參數寫入現場設備之時鐘設定。<br>5. 若誤差超過3秒，現場設備需利用 0F H+92 H 傳送及 SecDif 參數回報（SecDif：為 0F H+92 H 之參數）。(注意此時不需回應 0F H+80 H)<br>6. 若誤差於±3秒則不需回傳 0F H+92 H。(注意此時需回應 0F H+80 H)</td></tr></table> |
+| 參考訊息     | 0F H+92 H、0F H+C2 H、0F H+42 H、0F H+02 H、0F H+80 H。                                  |
+
+
 
 
