@@ -3,8 +3,12 @@ import threading
 import time
 import pytest
 import yaml
+import os
 from src.ntcip_parser import NTCIPParser
 from src.ntcip_server import NTCIPServer
+
+# 設定測試模式
+os.environ['NTCIP_TEST_MODE'] = '1'
 
 def test_parser_initialization():
     """測試解析器初始化"""
