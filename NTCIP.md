@@ -537,8 +537,8 @@ C. 排序建議
 | 目的         | 回報設定或查詢訊息無效。                                                                 |
 | 用途         | 現場設備之參數設定錯誤檢查。<br>針對所有訊息型態為設定與查詢之訊息，如確認設定或查詢有誤後，即以此訊息回應。 |
 | 訊息格式     | 0F H+81 H+CommandID+ErrorCode+ParameterNumber                                            |
-| 訊息參數定義 | CommandID：2 Byte，功能訊息碼<br>第一個 Byte 為設備碼（00 H &#126; FF H）<br>第二個 Byte 為指令碼（00 H &#126; FF H）<br>ErrorCode：1 Byte，<br>bit 0：無此訊息<br>bit 1：無法回應資料(如查無此資料或該資料不存在)<br>bit 2：參數值無效(有誤)，出現錯誤之參數之位移值則放在 ParameterNumber<br>bit 3：位元組組參數數目錯誤，將錯誤數目值放在 ParameterNumber<br>bit 4：設備類別錯誤<br>bit 5：逾時，收集資料(如資料碼)超過時間<br>bit 6：參數值超過硬體限制(有誤)，出現超限參數之位移值則放在 ParameterNumber<br>bit 7：已被訊息等級設定排除(0F H+13 H)<br>ParameterNumber：1 Byte，發生第一個錯誤參數數值之位址或參數數目的錯誤值<br>A) ErrorCode 之 bit2=1 時表示第一個錯誤參數位之位址<br>B) ErrorCode 之 bit3=1 時表示參數數目(太長/太短)錯誤值<br>C) ErrorCode 之 bit2=0 & bit3=0 時則 ParameterNumber 為 0。 |
-| 訊息處理步驟 | <table><tr><td>控制中心</td><td>←</td><td>號誌控制器、車輛偵測器、資訊可變標誌</td></tr><tr><td></td><td colspan="2">1. 接收設定型態之訊息<br>2. 檢核訊息有錯誤，以 0F H+81 H 將錯誤種類與錯誤參數數值位置回報。</td></tr><tr><td>3. 接收 0F H+81 H 與參數。<br>4. 依據錯誤回報，檢查訊息與參數，準備重送設定訊息。</td><td></td><td></td></tr></table> |
+| 訊息參數定義 | CommandID：2 Byte，功能訊息碼<br>第一個 Byte 為設備碼（00 H &#126; FF H）<br>第二個 Byte 為指令碼（00 H &#126; FF H）<br>ErrorCode：1 Byte，<br>bit 0：無此訊息<br>bit 1：無法回應資料(如查無此資料或該資料不存在)<br>bit 2：參數值無效(有誤)，出現錯誤之參數之位移值則放在 ParameterNumber<br>bit 3：位元組組參數數目錯誤，將錯誤數目值放在 ParameterNumber<br>bit 4：設備類別錯誤<br>bit 5：逾時，收集資料(如資料碼)超過時間<br>bit 6：參數值超過硬體限制(有誤)，出現超限參數之位移值則放在 ParameterNumber<br>bit 7：已被訊息等級設定排除(0F H+13 H)<br>ParameterNumber：1 Byte，發生第一個錯誤參數數值之位址或參數數目的錯誤值<br>(A) ErrorCode 之 bit2=1 時表示第一個錯誤參數位之位址<br>(B) ErrorCode 之 bit3=1 時表示參數數目(太長/太短)錯誤值<br>(C) ErrorCode 之 bit2=0 & bit3=0 時則 ParameterNumber 為 0。 |
+| 訊息處理步驟 | <table><tr><td>控制中心</td><td>←</td><td>號誌控制器、車輛偵測器、資訊可變標誌</td></tr><tr><td></td><td colspan="2">1. 接收設定型態之訊息<br>2. 檢核訊息有錯誤，以 0F H+81 H 將錯誤種<br>類與錯誤參數數值位置回報。</td></tr><tr><td>3. 接收 0F H+81 H 與參數。<br>4. 依據錯誤回報，檢查訊息與參數，<br>準備重送設定訊息。</td><td></td><td></td></tr></table> |
 | 參考訊息     | 0F H+80 H。                                                                              |
 
 ## 訊息說明：0F H+10 H 設定
@@ -644,6 +644,6 @@ C. 排序建議
 | 目的         | 設定現場設備之日期、時間。                                                               |
 | 用途         | 現場設備系統時間管理，定時對時、即時對時。                                               |
 | 訊息格式     | 0F H+12 H+Year+Month+Day+Week+Hour+Min+Sec                                               |
-| 訊息參數定義 | Year：1 Byte，年，整數(00~255)。（國曆）<br>Month：1 Byte，月，整數(01~12)。<br>Day：1 Byte，日，整數(01~31)。<br>Week：1 Byte，星期，整數(01~07)。<br>&nbsp;&nbsp;1：星期一<br>&nbsp;&nbsp;2：星期二<br>&nbsp;&nbsp;3：星期三<br>&nbsp;&nbsp;4：星期四<br>&nbsp;&nbsp;5：星期五<br>&nbsp;&nbsp;6：星期六<br>&nbsp;&nbsp;7：星期日<br>Hour：1 Byte，時，整數(00~23)。<br>Min：1 Byte，分，整數(00~59)。<br>Sec：1 Byte，秒，整數(00~59)。 |
+| 訊息參數定義 | Year：1 Byte，年，整數(00 &#126;255)。（國曆）<br>Month：1 Byte，月，整數(01 &#126;12)。<br>Day：1 Byte，日，整數(01 &#126;31)。<br>Week：1 Byte，星期，整數(01 &#126;07)。<br>&nbsp;&nbsp;1：星期一<br>&nbsp;&nbsp;2：星期二<br>&nbsp;&nbsp;3：星期三<br>&nbsp;&nbsp;4：星期四<br>&nbsp;&nbsp;5：星期五<br>&nbsp;&nbsp;6：星期六<br>&nbsp;&nbsp;7：星期日<br>Hour：1 Byte，時，整數(00 &#126;23)。<br>Min：1 Byte，分，整數(00 &#126;59)。<br>Sec：1 Byte，秒，整數(00 &#126;59)。 |
 
 
