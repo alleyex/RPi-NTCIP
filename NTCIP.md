@@ -678,6 +678,21 @@ C. 排序建議
 | 訊息處理步驟 | <table><tr><td>控制中心</td><td>→</td><td>號誌控制器、車輛偵測器、資訊可變標誌</td></tr><tr><td>1. 下傳 0F H+13 H 訊息及 CommandSet。</td><td></td><td>2. 接收 0F H+13 H 訊息及 CommandSet。<br>3. 依 CommandSet 設定設備使用之訊息等級，並啟動設備使用指定之訊息等級。</td></tr></table> |
 | 參考訊息     | 0F H+43 H、0F H+C3 H。                                                                  |
 
+## 訊息說明：AF H+18 H 彩色字窗圖型管理(單一圖形)
+
+| **欄位**     | **內容**                                                                                 |
+|--------------|------------------------------------------------------------------------------------------|
+| 訊息編號     | AF H+18 H                                                                                |
+| 訊息型態     | 設定                                                                                     |
+| 訊息等級     | B                                                                                        |
+| 訊息類別     | 彩色字窗圖型管理(單一圖形)                                                               |
+| 目的         | 下載彩色資訊可變標誌圖型。                                                               |
+| 用途         | 1. 資訊可變標誌重新啟動時，由控制中心將使用者所造圖型下載至資訊可變標誌。<br>2. 操作人員新造圖型。 |
+| 訊息格式     | AF H+18 H+PatternCode+FrameRow+FrameColumn+FrameTotal+FrameNumber+ColorMap               |
+| 訊息參數定義 | FrameRow+FrameColumn+FrameTotal+FrameNumber：同 AF H+16H。<br>PatternCode：2Bytes，圖型編碼，2 位 ASCII 字元編碼同 AF H+48 H 之 PatternCode。<br>ColorMap：(FrameColumn/4*FrameRow)Bytes，字窗彩色表，以 16x16 字窗為例。<br>第 1 個位元組：<br>[Bit 0  第 1 列第 4 個點紅色]<br>[Bit 1  第 1 列第 4 個點綠色]<br>[Bit 2  第 1 列第 3 個點紅色]<br>[Bit 3  第 1 列第 3 個點綠色]<br>[Bit 4  第 1 列第 2 個點紅色]<br>[Bit 5  第 1 列第 2 個點綠色]<br>[Bit 6  第 1 列第 1 個點紅色]<br>[Bit 7  第 1 列第 1 個點綠色]<br>...<br>第 64 個位元組：<br>[Bit 0  第 16 列第 16 個點紅色]<br>[Bit 1  第 16 列第 16 個點綠色]<br>[Bit 2  第 16 列第 15 個點紅色]<br>[Bit 3  第 16 列第 15 個點綠色]<br>[Bit 4  第 16 列第 14 個點紅色]<br>[Bit 5  第 16 列第 14 個點綠色]<br>[Bit 6  第 16 列第 13 個點紅色]<br>[Bit 7  第 16 列第 13 個點綠色] |
+| 訊息處理步驟 | <table><tr><td>控制中心</td><td>→</td><td>資訊可變標誌</td></tr><tr><td>1. 依 AF H+18 H 訊息格式包裝下傳，每次只送一個字窗。</td><td></td><td>2. 接收訊息 AF H+18 H。</td></tr></table> |
+| 參考訊息     | AF H+48 H、AF H+C8 H。                                                                   |
+
 
 
 
